@@ -1,0 +1,93 @@
+
+# English Dictionary Using Hash Table
+
+size = 10
+dictionary = [[] for i in range(size)]
+
+# Hash function
+def hash_function(word):
+    return sum(ord(char) for char in word) % size
+
+# Add a word
+def add_word(word, meaning):
+    index = hash_function(word)
+
+    for item in dictionary[index]:
+        if item[0] == word:
+            item[1] = meaning
+            print("Meaning updated successfully!")
+            return
+
+    dictionary[index].append([word, meaning])
+    print("Word added successfully!")
+
+# Search a word
+def search_word(word):
+    index = hash_function(word)
+
+    for item in dictionary[index]:
+        if item[0] == word:
+            print("Meaning:", item[1])
+            return
+
+    print("Word not found!")
+
+# Delete a word
+def delete_word(word):
+    index = hash_function(word)
+
+    for item in dictionary[index]:
+        if item[0] == word:
+            dictionary[index].remove(item)
+            print("Word deleted successfully!")
+            return
+
+    print("Word not found!")
+
+# Display all words
+def display_dictionary():
+    print("\nEnglish Dictionary")
+
+    for i in range(size):
+        for item in dictionary[i]:
+            print(item[0], ":", item[1])
+
+# Main program
+while True:
+    print("\n--- English Dictionary ---")
+    print("1. Add Word")
+    print("2. Search Word")
+    print("3. Update Meaning")
+    print("4. Delete Word")
+    print("5. Display Dictionary")
+    print("6. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        word = input("Enter word: ").lower()
+        meaning = input("Enter meaning: ")
+        add_word(word, meaning)
+
+    elif choice == "2":
+        word = input("Enter word to search: ").lower()
+        search_word(word)
+
+    elif choice == "3":
+        word = input("Enter word to update: ").lower()
+        meaning = input("Enter new meaning: ")
+        add_word(word, meaning)
+
+    elif choice == "4":
+        word = input("Enter word to delete: ").lower()
+        delete_word(word)
+
+    elif choice == "5":
+        display_dictionary()
+
+    elif choice == "6":
+        print("Exiting Dictionary Application!")
+        break
+
+    else:
+        print("Invalid choice! Try again.")
