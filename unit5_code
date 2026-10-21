@@ -1,0 +1,76 @@
+
+# Google Maps Route Finding Using Dijkstra's Algorithm
+
+# City map represented as a weighted graph
+graph = {
+    'A': {'B': 4, 'C': 2},
+    'B': {'A': 4, 'C': 1, 'D': 5},
+    'C': {'A': 2, 'B': 1, 'D': 8, 'E': 10},
+    'D': {'B': 5, 'C': 8, 'E': 2},
+    'E': {'C': 10, 'D': 2}
+}
+
+def dijkstra(graph, start, end):
+    distances = {}
+    previous = {}
+    unvisited = list(graph)
+
+    for node in graph:
+        distances[node] = float('inf')
+
+    distances[start] = 0
+
+    while unvisited:
+        current = min(unvisited, key=lambda node: distances[node])
+
+        if distances[current] == float('inf'):
+            break
+
+        unvisited.remove(current)
+
+        if current == end:
+            break
+
+        for neighbour, distance in graph[current].items():
+            new_distance = distances[current] + distance
+
+            if new_distance < distances[neighbour]:
+                distances[neighbour] = new_distance
+                previous[neighbour] = current
+
+    if distances[end] == float('inf'):
+        return None, float('inf')
+
+    path = []
+    current = end
+
+    while current != start:
+        path.append(current)
+        current = previous[current]
+
+    path.append(start)
+    path.reverse()
+
+    return path, distances[end]
+
+
+
+print("Google Maps Route Finding")
+print("-------------------------")
+print("Available locations:", list(graph.keys()))
+
+start = input("Enter starting location (A-E): ").upper()
+end = input("Enter destination (A-E): ").upper()
+
+if start not in graph or end not in graph:
+    print("Invalid location!")
+
+else:
+    path, distance = dijkstra(graph, start, end)
+
+    if path is None:
+        print("No route available!")
+
+    else:
+        print("\nShortest Route:", " -> ".join(path))
+        print("Total Distance:", distance, "km")
